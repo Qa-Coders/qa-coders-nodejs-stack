@@ -1,0 +1,41 @@
+name: base-template
+description: Template Base NodeJS
+types:
+  - app-template
+inputs:
+  - label: Project name
+    type: text
+    name: project_name
+    default: project-name
+    global: true
+
+  - name: api_version
+    type: text
+    label: Informe a versão da API
+    default: 1.0.0
+    global: true
+
+  - name: api_description
+    type: text
+    label: Informe a descrição da API
+    default: API NodeJS
+    required: true
+
+  - name: api_author
+    type: text
+    label: Informe o autor da API
+    required: true
+
+  - name: api_license
+    type: text
+    label: Informe a Licença da API
+    default: ISC
+
+global-computed-inputs:
+  api_name: "{{project_name|replace(' ','_')|replace('/','-')|replace('\\\\','-')}}"
+
+hooks:
+  - type: run
+    trigger: after-render
+    commands:
+      - npm install

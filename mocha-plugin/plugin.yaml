@@ -1,0 +1,41 @@
+name: mocha-plugin
+description: Configurar Mocha no Projeto NodeJS
+display-name: mocha-plugin
+picture: plugin.png
+category: backend # Ref: https://docs.stackspot.com/latest/docs/creators-guide/yaml/#category
+compatibility:
+  - javascript
+  - mocha
+about: docs/about.md
+usage: docs/usage.md
+use-case: docs/use-case.md
+implementation: docs/implementation.md
+technologies: # Ref: https://docs.stackspot.com/latest/docs/creators-guide/yaml/#technologies
+  - "Api"
+types:
+  - app
+inputs:
+
+hooks:
+  - type: run
+    trigger: after-render
+    commands:
+      - npm install -D mocha chai chai-http @faker-js/faker
+  - type: edit-json
+    trigger: after-render
+    path: package.json
+    indent: "\t"
+    encoding: utf-8
+    changes:
+      - jsonpath: "$.scripts"
+        update:
+          value: |
+            {
+              "test": "nodemon --exec \"mocha --timeout 10000\""
+            }
+        when:
+          not-exists: "$.scripts.test"
+      - jsonpath: "$.scripts.test"
+        update:
+          value: |
+            "nodemon --exec \"mocha --timeout 10000\""

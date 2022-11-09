@@ -1,0 +1,71 @@
+name: mongoose-plugin
+description: Configurar Mongooose no projeto NodeJS
+display-name: mongoose-plugin
+picture: plugin.png
+category: backend # Ref: https://docs.stackspot.com/latest/docs/creators-guide/yaml/#category
+compatibility:
+  - javascript
+  - mongoose
+about: docs/about.md
+usage: docs/usage.md
+use-case: docs/use-case.md
+implementation: docs/implementation.md
+technologies: # Ref: https://docs.stackspot.com/latest/docs/creators-guide/yaml/#technologies
+  - "Api"
+types:
+  - app
+inputs:
+
+  - label: Informar MongoDB connection para produção
+    type: text
+    name: mongodb_connection_production
+    default: mongodb://nome_banco:senha@servidor.com.br:27017/usuario
+
+  - label: Informar MongoDB connection para desenvolvimento
+    type: text
+    name: mongodb_connection_dev
+    default: mongodb://root:example@localhost:27017/
+
+  - label: Add MongoDB by Docker-Compose file?
+    type: bool
+    name: use_mongodb_on_docker_compose
+    default: true
+  
+hooks:
+
+  - type: render-templates
+    trigger: after-render
+    path: docker-templates
+    condition:
+      variable: use_mongodb_on_docker_compose
+      operator: ==
+      value: true
+
+  - type: run
+    trigger: after-render
+    commands:
+      - npm install args-parser
+      - npm install lodash
+      - npm install mongoose
+      - npm install mongoose-beautiful-unique-validation
+      - npm install mongoose-paginate
+      - npm install node-restful
+
+  - type: edit-json
+    trigger: after-render
+    path: config/setup-registry.json
+    indent: "\t"
+    encoding: utf-8
+    changes:
+      - jsonpath: "$"
+        update:
+          value: |
+            {
+              "mongoose": "./mongoose"
+            }
+        when:
+          not-exists: "$.mongoose"
+      - jsonpath: "$.mongoose"
+        update:
+          value: |
+            "./mongoose"

@@ -1,0 +1,70 @@
+name: register-api-sample-plugin
+description: Api de exemplo
+display-name: register-api-sample-plugin
+picture: plugin.png
+category: backend # Ref: https://docs.stackspot.com/latest/docs/creators-guide/yaml/#category
+compatibility:
+  - javascript
+  - mongoose
+about: docs/about.md
+usage: docs/usage.md
+use-case: docs/use-case.md
+implementation: docs/implementation.md
+technologies: # Ref: https://docs.stackspot.com/latest/docs/creators-guide/yaml/#technologies
+  - "Api"
+types:
+  - app
+inputs:
+  - label: Would like to add integration tests?
+    type: bool
+    name: register_api_test
+    default: true
+  # - label: Example of number
+  #   type: int
+  #   name: any_number
+  #   default: "10"
+  # - label: Example of list
+  #   type: multiselect
+  #   name: any_list
+  #   items:
+  #     - item1
+  #     - item2
+
+hooks:
+  - type: run
+    trigger: after-render
+    commands:
+      - npm install args-parser
+      - npm install lodash
+      - npm install mongoose
+      - npm install mongoose-beautiful-unique-validation
+      - npm install mongoose-paginate
+      - npm install -D mongodb-memory-server @faker-js/faker
+      - npm install node-restful
+
+  - type: edit-json
+    trigger: after-render
+    path: config/routes-registry.json
+    indent: "\t"
+    encoding: utf-8
+    changes:
+      - jsonpath: "$"
+        update:
+          value: |
+            {
+              "/register": "./../api/register/registerService"
+            }
+        when:
+          not-exists: "$.['/register']"
+      - jsonpath: "$.['/register']"
+        update:
+          value: |
+            "./../api/register/registerService"
+  
+  - type: render-templates
+    trigger: after-render
+    path: test-templates
+    condition:
+      variable: register_api_test
+      operator: ==
+      value: true
