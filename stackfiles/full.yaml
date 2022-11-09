@@ -1,0 +1,12 @@
+type: app
+description: Criar projeto de exemplo completo 
+template: qa-coders-nodejs-stack/base-template
+inputs:
+  api_description: API NodeJS
+  api_license: ISC
+plugins:
+- plugin: qa-coders-nodejs-stack/mocha-plugin
+- plugin: qa-coders-nodejs-stack/mongoose-plugin
+- plugin: qa-coders-nodejs-stack/register-api-sample-plugin
+  inputs:
+    register_api_test: true

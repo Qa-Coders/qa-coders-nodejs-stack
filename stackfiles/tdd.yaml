@@ -1,0 +1,10 @@
+type: app
+description: Criar projetos pra estudos usando TDD
+template: qa-coders-nodejs-stack/base-template
+inputs:
+  api_description: API NodeJS
+  api_license: ISC
+plugins:
+- plugin: qa-coders-nodejs-stack/mocha-plugin
+- plugin: qa-coders-nodejs-stack/mongoose-plugin
+  
