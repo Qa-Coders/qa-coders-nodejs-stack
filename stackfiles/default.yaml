@@ -1,0 +1,14 @@
+type: app
+description: Default stackfile usecase description
+# template used to create the project
+template: qa-coders-nodejs-stack/<template-name>
+inputs:
+  some_input: value
+# list of plugins to be applied after project creation
+plugins:
+  - plugin: qa-coders-nodejs-stack/<plugin-name>
+    inputs:
+      some_input: value
+      some_list:
+        - item1
+        - item2
